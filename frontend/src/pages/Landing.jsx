@@ -48,22 +48,62 @@ const FloatingParticles = () => {
   );
 };
 
+// Grid Background Effect
+const GridBackground = () => {
+  return (
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-slate-950 pointer-events-none">
+      {/* Primary Grid Layer - Cyan colored and more opaque */}
+      <div
+        className="absolute inset-0 opacity-15"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, #00FFFF 3.5px, transparent 2.5px),
+            linear-gradient(to bottom, #00FFFF 3.5px, transparent 2.5px)
+          `,
+          backgroundSize: '40px 40px',
+          maskImage: 'radial-gradient(ellipse 80% 80% at 50% 0%, black 40%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 0%, black 40%, transparent 100%)'
+        }}
+      ></div>
+
+      {/* Glow Effects - Also boosted */}
+      <motion.div
+        animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-primary/20 blur-[120px] rounded-full mix-blend-screen"
+      />
+      <motion.div
+        animate={{ scale: [1, 1.2, 1], rotate: [0, -5, 0] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "linear", delay: 2 }}
+        className="absolute top-[20%] right-[-10%] w-[50vw] h-[70vw] bg-secondary/20 blur-[120px] rounded-full mix-blend-screen"
+      />
+      <motion.div
+        animate={{ x: [0, 50, 0], y: [0, -30, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-[-10%] left-[10%] w-[50vw] h-[50vw] bg-accent/20 blur-[120px] rounded-full mix-blend-screen"
+      />
+
+      <FloatingParticles />
+    </div>
+  );
+};
+
 export default function Landing() {
   const [demoScore, setDemoScore] = useState(0);
   const [isScanning, setIsScanning] = useState(true);
-  
+
   const demoRef = useRef(null);
   const isDemoInView = useInView(demoRef, { once: true, margin: "-100px" });
 
   useEffect(() => {
     if (isDemoInView) {
       setTimeout(() => setIsScanning(false), 2400); // Stop scan after 2.4s
-      
+
       let start = 0;
       const target = 92; // Final visual score
       const duration = 2400;
       const increment = target / (duration / 16);
-      
+
       const timer = setInterval(() => {
         start += increment;
         if (start >= target) {
@@ -78,31 +118,14 @@ export default function Landing() {
   }, [isDemoInView]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 overflow-hidden font-sans selection:bg-primary/30 relative">
-      
+    <div className="min-h-screen text-slate-200 overflow-hidden font-sans selection:bg-primary/30 relative">
+
       {/* Animated Gradient Background & Particles */}
-      <div className="fixed inset-0 overflow-hidden -z-10 bg-slate-950 pointer-events-none">
-        <motion.div 
-          animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }} 
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[0%] left-[-10%] w-[50vw] h-[50vw] bg-primary/20 blur-[150px] rounded-full mix-blend-screen"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1], rotate: [0, -5, 0] }} 
-          transition={{ duration: 18, repeat: Infinity, ease: "linear", delay: 2 }}
-          className="absolute top-[30%] right-[-10%] w-[40vw] h-[60vw] bg-secondary/15 blur-[150px] rounded-full mix-blend-screen"
-        />
-        <motion.div 
-          animate={{ x: [0, 50, 0], y: [0, -30, 0] }} 
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-[-10%] left-[20%] w-[40vw] h-[40vw] bg-accent/15 blur-[150px] rounded-full mix-blend-screen"
-        />
-        <FloatingParticles />
-      </div>
+      <GridBackground />
 
       {/* Navigation */}
       <nav className="container mx-auto px-6 py-6 flex items-center justify-between relative z-10 backdrop-blur-sm border-b border-white/5 rounded-b-3xl">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-3"
         >
@@ -112,8 +135,8 @@ export default function Landing() {
           <span className="text-2xl font-bold text-white tracking-tight drop-shadow-md">AccessiScan<span className="text-primary">.ai</span></span>
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-          <Link 
-            to="/auth" 
+          <Link
+            to="/auth"
             className="text-sm font-bold px-6 py-2.5 rounded-full border border-slate-600 bg-slate-800/80 hover:bg-slate-700 hover:text-primary transition-all shadow-md text-white"
           >
             Sign In
@@ -123,7 +146,7 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section className="container mx-auto px-6 pt-24 pb-32 text-center relative z-10">
-        <motion.div 
+        <motion.div
           initial="hidden" animate="visible" variants={staggerContainer}
           className="max-w-4xl mx-auto flex flex-col items-center"
         >
@@ -131,28 +154,28 @@ export default function Landing() {
             <Sparkles size={16} />
             <span>Hackathon Winning Accessibility Platform</span>
           </motion.div>
-          
+
           <motion.h1 variants={fadeIn} className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-500 mb-6 leading-tight drop-shadow-lg">
-            AI-Powered <br className="hidden md:block"/> Accessibility Audits
+            AI-Powered <br className="hidden md:block" /> Accessibility Audits
           </motion.h1>
-          
+
           <motion.p variants={fadeIn} className="text-xl md:text-2xl text-slate-300/90 mb-10 max-w-3xl leading-relaxed font-light drop-shadow-sm">
             Scan, Fix, and Improve Web Accessibility Effortlessly. Automatically detect WCAG violations and instantly generate AI-driven remediation code payloads.
           </motion.p>
-          
+
           <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
-            <Link 
-              to="/scan" 
+            <Link
+              to="/scan"
               className="flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-secondary text-slate-900 px-10 py-4 rounded-full font-black text-lg hover:shadow-[0_10px_40px_rgba(108,99,255,0.4)] hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500 ease-in-out"></div>
               Start Free Audit <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-            <a 
+            <a
               href="#demo"
               className="flex items-center justify-center gap-2 bg-slate-800/60 border border-slate-600 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-slate-700 hover:border-slate-500 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-lg"
             >
-               View Demo
+              View Demo
             </a>
           </motion.div>
         </motion.div>
@@ -160,7 +183,7 @@ export default function Landing() {
 
       {/* Interactive Demo Preview Section */}
       <section id="demo" ref={demoRef} className="container mx-auto px-6 pb-40 relative z-10">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 40 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -169,7 +192,7 @@ export default function Landing() {
         >
           {/* Decorative glows behind dashboard mockup */}
           <div className="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-accent rounded-[2.5rem] blur-xl opacity-40 animate-pulse"></div>
-          
+
           {/* Glassmorphic Dashboard Mockup */}
           <div className="relative bg-slate-900/80 backdrop-blur-2xl border border-slate-700/60 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col min-h-[400px]">
             {/* Window header */}
@@ -186,32 +209,32 @@ export default function Landing() {
                 </div>
               </div>
             </div>
-            
+
             {/* Dashboard body */}
             <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8 flex-1">
               {/* Score circle */}
               <div className="col-span-1 bg-slate-800/60 rounded-3xl p-6 border border-slate-700/50 flex flex-col items-center justify-center relative overflow-hidden group shadow-lg">
                 <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10 w-40 h-40 rounded-full border-[6px] border-slate-800 flex items-center justify-center mb-6 shadow-inner">
-                  <svg className="absolute inset-0 w-full h-full -rotate-90">
-                    <circle cx="80" cy="80" r="74" className="stroke-slate-700/50" strokeWidth="12" fill="none" />
-                    {/* SVG Arc length: 2*PI*74 ~ 465 */}
-                    <motion.circle 
-                      cx="80" cy="80" r="74" 
-                      className={`${isScanning ? 'stroke-primary' : 'stroke-secondary'} drop-shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-colors duration-1000`} 
-                      strokeWidth="12" fill="none" 
-                      strokeDasharray="465"
-                      initial={{ strokeDashoffset: 465 }}
-                      animate={isDemoInView ? { strokeDashoffset: 465 - (465 * (demoScore/100)) } : { strokeDashoffset: 465 }}
+                  <svg className="absolute inset-0 w-full h-full -rotate-90 overflow-visible">
+                    <circle cx="80" cy="80" r="65" className="stroke-slate-700/50" strokeWidth="12" fill="none" />
+                    {/* SVG Arc length: 2*PI*65 ~ 408 */}
+                    <motion.circle
+                      cx="80" cy="80" r="65"
+                      className={`${isScanning ? 'stroke-primary' : 'stroke-secondary'} drop-shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-colors duration-1000`}
+                      strokeWidth="12" fill="none"
+                      strokeDasharray="408"
+                      initial={{ strokeDashoffset: 408 }}
+                      animate={isDemoInView ? { strokeDashoffset: 408 - (408 * (demoScore / 100)) } : { strokeDashoffset: 408 }}
                       transition={{ duration: 0.1, ease: "linear" }}
-                      strokeLinecap="round" 
+                      strokeLinecap="round"
                     />
                   </svg>
                   <div className="text-center flex flex-col items-center">
                     {isScanning ? (
-                       <Loader2 className="animate-spin text-primary mb-1" size={32} />
+                      <Loader2 className="animate-spin text-primary mb-1" size={32} />
                     ) : (
-                       <span className="text-5xl font-black text-white drop-shadow-md">{demoScore}<span className="text-xl text-slate-400">%</span></span>
+                      <span className="text-5xl font-black text-white drop-shadow-md">{demoScore}<span className="text-xl text-slate-400">%</span></span>
                     )}
                   </div>
                 </div>
@@ -226,11 +249,11 @@ export default function Landing() {
                   { title: "Insufficient Color Contrast", severity: "Medium", color: "text-yellow-500", bg: "bg-yellow-500/10 border-yellow-500/20" },
                   { title: "Non-descriptive ARIA labels", severity: "Low", color: "text-primary", bg: "bg-primary/10 border-primary/20" }
                 ].map((issue, idx) => (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, x: 30 }}
                     animate={isDemoInView && !isScanning ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
                     transition={{ delay: idx * 0.15, type: 'spring' }}
-                    key={idx} 
+                    key={idx}
                     className={`flex justify-between items-center p-5 bg-slate-900/60 rounded-2xl border hover:bg-slate-800 transition-all duration-300 shadow-md ${issue.bg}`}
                   >
                     <div className="flex items-center gap-5">
@@ -239,7 +262,7 @@ export default function Landing() {
                       </div>
                       <span className="font-bold text-slate-200 text-lg">{issue.title}</span>
                     </div>
-                    <motion.button 
+                    <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className={`text-sm font-bold px-4 py-2 rounded-lg text-center hidden sm:block bg-slate-800 ${issue.color} border border-slate-700 shadow-sm`}
@@ -248,10 +271,10 @@ export default function Landing() {
                     </motion.button>
                   </motion.div>
                 ))}
-                
+
                 {/* Skeleton loaders while scanning */}
                 {isScanning && [...Array(3)].map((_, idx) => (
-                  <motion.div 
+                  <motion.div
                     key={`skel-${idx}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -272,7 +295,7 @@ export default function Landing() {
       {/* FeatureCards Grid using Styled Components */}
       <section className="container mx-auto px-6 pb-40 relative z-10">
         <div className="text-center mb-20">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once:true }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6 drop-shadow-md">Complete Audit Arsenal</h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-xl font-light">Everything you need to ship accessible web products, architected cleanly into a single interactive workflow.</p>
           </motion.div>
@@ -280,40 +303,40 @@ export default function Landing() {
 
         {/* CSS GRID OF INTERACTIVE FLIP CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-16 perspective-1000">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once:true }} transition={{ delay: 0.1 }}>
-            <FeatureCard 
-              title="URL Scanner" 
-              desc="Deep scan any webpage instantly. Analyzes the raw DOM tree, semantic structure mapping, and ARIA roles precisely." 
-              icon={LayoutDashboard} 
-              color="text-primary" 
-              gradient="#6C63FF" 
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <FeatureCard
+              title="URL Scanner"
+              desc="Deep scan any webpage instantly. Analyzes the raw DOM tree, semantic structure mapping, and ARIA roles precisely."
+              icon={LayoutDashboard}
+              color="text-primary"
+              gradient="#6C63FF"
             />
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once:true }} transition={{ delay: 0.2 }}>
-             <FeatureCard 
-              title="Chrome Ext." 
-              desc="Audit internal portals safely, strictly authenticated apps, and local localhost environments bypassing firewalls." 
-              icon={Chrome} 
-              color="text-secondary" 
-              gradient="#00E5FF" 
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
+            <FeatureCard
+              title="Chrome Ext."
+              desc="Audit internal portals safely, strictly authenticated apps, and local localhost environments bypassing firewalls."
+              icon={Chrome}
+              color="text-secondary"
+              gradient="#00E5FF"
             />
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once:true }} transition={{ delay: 0.3 }}>
-             <FeatureCard 
-              title="AI Remediation" 
-              desc="Stop guessing entirely. Get context-aware AI recommendations populated with copy-pasteable HTML/React fixes." 
-              icon={Zap} 
-              color="text-accent" 
-              gradient="#FF4D6D" 
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
+            <FeatureCard
+              title="AI Remediation"
+              desc="Stop guessing entirely. Get context-aware AI recommendations populated with copy-pasteable HTML/React fixes."
+              icon={Zap}
+              color="text-accent"
+              gradient="#FF4D6D"
             />
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once:true }} transition={{ delay: 0.4 }}>
-             <FeatureCard 
-              title="Visual Engine" 
-              desc="See exactly where code issues are geometrically. Visual markers inject right over your frontend DOM elements dynamically." 
-              icon={Code2} 
-              color="text-emerald-400" 
-              gradient="#34d399" 
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }}>
+            <FeatureCard
+              title="Visual Engine"
+              desc="See exactly where code issues are geometrically. Visual markers inject right over your frontend DOM elements dynamically."
+              icon={Code2}
+              color="text-emerald-400"
+              gradient="#34d399"
             />
           </motion.div>
         </div>
